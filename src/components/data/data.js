@@ -1,7 +1,7 @@
 export const  projects = [
     {
         title: 'Landing Page - Provedora de Internet',
-        description: 'Desenvolvi uma landing page para uma provedora de internet local, utilizando React e CSS. A página apresenta informações sobre os planos oferecidos e depoimentos de clientes.',
+        description: 'Desenvolvi uma landing page para uma provedora de internet local fictícia, utilizando React e CSS. A página apresenta informações sobre os planos oferecidos e depoimentos de clientes.',
         tech: ['React, CSS, JavaScript'],
         link: 'https://github.com/thaylanbf1/FireLink-Project.git'
     },
