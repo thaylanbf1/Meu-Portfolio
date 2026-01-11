@@ -33,7 +33,7 @@ const Hero = () => {
             <a href="https://github.com/thaylanbf1" target='_blank' rel='noopener noreferrer' className='hover:text-purple-400 transition-colors'>
                 <Github className='w-6 h-6'/>
             </a>
-            <a href="www.linkedin.com/in/thaylanbf1" target='_blank' rel='noopener noreferrer' className='hover:text-purple-400 transition-colors'>
+            <a  href="https://www.linkedin.com/in/thaylanbf1" target='_blank' rel='noopener noreferrer' className='hover:text-purple-400 transition-colors'>
                 <Linkedin className='w-6 h-6'/>
             </a>
             <a href="mailto:thaylanfonseca12@gmail.com" target='_blank' rel='noopener noreferrer' className='hover:text-purple-400 transition-colors'>

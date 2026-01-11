@@ -18,7 +18,7 @@ const Contatos = () => {
                     <Mail className="w-5 h-5" />
                     Enviar Email
                 </a>
-                <a href="www.linkedin.com/in/thaylanbf1" target="_blank" rel="noopener noreferrer" className="px-8 py-4 border border-purple-500 rounded-full font-semibold hover:bg-purple-500/10 transition-colors flex items-center justify-center gap-2">
+                <a  href="https://www.linkedin.com/in/thaylanbf1" target="_blank" rel="noopener noreferrer" className="px-8 py-4 border border-purple-500 rounded-full font-semibold hover:bg-purple-500/10 transition-colors flex items-center justify-center gap-2">
                     <Linkedin className="w-5 h-5" />
                     LinkedIn
                 </a>
