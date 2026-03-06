@@ -33,7 +33,7 @@ function App() {
       <Navigation activeSection={activeSection} scrollToSection={scrollToSection} />
       <Hero/>
       <Sobre />
-      <ProjectSection />
+      <ProjectSection username='thaylanbf1' />
       <SkillSection />
       <Contatos />
       <Footer/>
