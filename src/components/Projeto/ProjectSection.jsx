@@ -39,7 +39,7 @@ const ProjectSection = ({username = 'thaylanbf1'}) => {
   }, [username])
 
   return (
-    <section id="projetos" className="min-h-screen py-20 px-6 relative z-10">
+    <section id="projeto" className="min-h-screen py-20 px-6 relative z-10">
       {/* Título */}
       <div className="text-center mb-12">
         <h2 className="text-5xl md:text-6xl font-bold mb-4">
