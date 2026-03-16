@@ -3,7 +3,7 @@ import {X, Menu} from 'lucide-react'
 
 const Navigation = ({activeSection, scrollToSection}) => {
     const [isMenuOpen, setIsMebuOpen] = useState(false)
-    const menuItens = ['home', 'sobre', 'projeto', 'skills', 'contato']
+    const menuItens = ['home', 'sobre', 'projetos', 'skills', 'contato']
   return (
     <nav className='fixed top-0 w-full z-50 backdrop-blur-md bg-[#210d38] border-b border-slate-600'>
         <div className='max-w 7xl mx-auto px-6 py-4'>
