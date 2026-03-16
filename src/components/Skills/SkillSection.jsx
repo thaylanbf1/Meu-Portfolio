@@ -104,7 +104,7 @@ const SkillSection = () => {
         {/* Título */}
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
               Habilidades
             </span>
           </h2>
@@ -117,12 +117,12 @@ const SkillSection = () => {
             <div
               key={index}
               className={`group relative p-8 rounded-xl border-2 ${skill.borderColor} ${skill.bgColor} 
-                transition-all duration-300 hover:scale-105 hover:border-opacity-100 cursor-pointer
+                transition-all duration-300 hover:scale-105 hover:border-opacity-100
                 hover:shadow-lg`}
             >
               {/* Gradient overlay no hover */}
               <div className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-5 
-                bg-gradient-to-br transition-opacity duration-300`}
+                bg-linear-to-br transition-opacity duration-300`}
               />
 
               {/* Conteúdo */}
