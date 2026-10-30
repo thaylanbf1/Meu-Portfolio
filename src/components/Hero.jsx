@@ -20,7 +20,7 @@ const Hero = () => {
         </h1>
 
         <p className='text-xl md:text-2xl text-slate-200 mb-8'>
-            Desenvolvedor Front End em formação, apaixonado pro criar experiencias visuais, interativas e responsivas na web. Com desejo de migrar para a carreira Full Stack.
+            Desenvolvedor Front End em formação, apaixonado pro criar experiencias visuais, interativas e responsivas na web.
         </p>
 
         <div className='flex gap-4 justify-center mb-12'>

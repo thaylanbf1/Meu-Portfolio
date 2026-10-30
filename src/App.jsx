@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import './App.css'
 import Navigation from './components/Navigation.jsx'
 import AnimatedBackground from './components/AnimatedBackground.jsx'
 import Hero from './components/Hero.jsx'
@@ -8,6 +7,7 @@ import ProjectSection from './components/Projeto/ProjectSection.jsx'
 import SkillSection from './components/Skills/SkillSection.jsx'
 import Contatos from './components/Contatos.jsx'
 import Footer from './components/Footer.jsx'
+import { Toaster } from 'sonner'
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
@@ -37,6 +37,7 @@ function App() {
       <SkillSection />
       <Contatos />
       <Footer/>
+      <Toaster theme='dark' position='bottom-right' richColors />
     </div>
   )
 }

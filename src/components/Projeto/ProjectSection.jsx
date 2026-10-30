@@ -1,42 +1,48 @@
 import { Loader, AlertCircle } from "lucide-react"
 import ProjectCard from "./ProjectCard"
-import { useState, useEffect } from "react"
+import { useState, useMemo } from "react"
+import useGithubRepos from "../../hooks/useGithubRepos"
 
+const PAGE_SIZE = 6
+
+const SORT_OPTIONS = {
+  stars: { label: "Mais estrelas", compare: (a, b) => b.stargazers_count - a.stargazers_count },
+  recent: { label: "Mais recentes", compare: (a, b) => new Date(b.pushed_at) - new Date(a.pushed_at) },
+  forks: { label: "Mais forks", compare: (a, b) => b.forks_count - a.forks_count },
+  name: { label: "Nome (A-Z)", compare: (a, b) => a.name.localeCompare(b.name) },
+}
+
+const selectClass =
+  "bg-slate-900/60 border border-slate-700 text-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-400"
 
 const ProjectSection = ({username = 'thaylanbf1'}) => {
-     const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { repos, loading, error } = useGithubRepos(username)
+  const [sortBy, setSortBy] = useState("stars")
+  const [language, setLanguage] = useState("all")
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
 
-  // Buscar projetos apenas uma vez ao montar o componente
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true)
-        
-        // URL da API do GitHub - sempre ordenado por stars, desc
-        const url = `https://api.github.com/users/${username}/repos?per_page=6&sort=stars&order=desc`
+  // Filtro e ordenação em memória: não geram novas requisições à API
+  const languages = useMemo(
+    () => [...new Set(repos.map((repo) => repo.language).filter(Boolean))].sort(),
+    [repos]
+  )
 
-        const response = await fetch(url)
-        
-        if (!response.ok) {
-          throw new Error(`Erro ${response.status}: ${response.statusText}`)
-        }
+  const filtered = useMemo(() => {
+    const list = language === "all" ? repos : repos.filter((repo) => repo.language === language)
+    return [...list].sort(SORT_OPTIONS[sortBy].compare)
+  }, [repos, sortBy, language])
 
-        let data = await response.json()
-        setProjects(data)
-        setError(null)
-      } catch (err) {
-        setError(err.message)
-        setProjects([])
-        console.error('Erro ao buscar projetos do GitHub:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
+  const projects = filtered.slice(0, visibleCount)
 
-    fetchProjects()
-  }, [username])
+  const handleSortChange = (event) => {
+    setSortBy(event.target.value)
+    setVisibleCount(PAGE_SIZE)
+  }
+
+  const handleLanguageChange = (event) => {
+    setLanguage(event.target.value)
+    setVisibleCount(PAGE_SIZE)
+  }
 
   return (
     <section id="projetos" className="min-h-screen py-20 px-6 relative z-10">
@@ -77,12 +83,55 @@ const ProjectSection = ({username = 'thaylanbf1'}) => {
       {/* Grid de projetos */}
       {!loading && !error && (
         <>
-          {projects.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
+          {repos.length > 0 && (
+            <div className="max-w-6xl mx-auto mb-8 flex flex-wrap items-center justify-between gap-4">
+              <p className="text-slate-400 text-sm">
+                Mostrando {projects.length} de {filtered.length} projetos
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <select value={sortBy} onChange={handleSortChange} className={selectClass} aria-label="Ordenar por">
+                  {Object.entries(SORT_OPTIONS).map(([value, { label }]) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
+                <select value={language} onChange={handleLanguageChange} className={selectClass} aria-label="Filtrar por linguagem">
+                  <option value="all">Todas as linguagens</option>
+                  {languages.map((lang) => (
+                    <option key={lang} value={lang}>{lang}</option>
+                  ))}
+                </select>
+              </div>
             </div>
+          )}
+
+          {projects.length > 0 ? (
+            <>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {projects.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+              {(visibleCount < filtered.length || visibleCount > PAGE_SIZE) && (
+                <div className="flex flex-wrap justify-center gap-4">
+                  {visibleCount < filtered.length && (
+                    <button
+                      onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+                      className="px-6 py-3 rounded-lg border border-cyan-400/40 text-cyan-300 hover:bg-cyan-400/10 transition-colors"
+                    >
+                      Mostrar mais ({filtered.length - visibleCount} restantes)
+                    </button>
+                  )}
+                  {visibleCount > PAGE_SIZE && (
+                    <button
+                      onClick={() => setVisibleCount(PAGE_SIZE)}
+                      className="px-6 py-3 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700/30 transition-colors"
+                    >
+                      Mostrar menos
+                    </button>
+                  )}
+                </div>
+              )}
+            </>
           ) : (
             <div className="text-center py-16">
               <p className="text-slate-400 text-lg">

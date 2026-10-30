@@ -1,6 +1,10 @@
-const SkillSection = () => {
-  const skills = [
+import useGithubRepos from "../../hooks/useGithubRepos"
+import { buildSkills } from "../../utils/buildSkills"
+
+// Catálogo de skills conhecidas (visual); o que aparece na tela vem dos repos do GitHub
+const catalog = [
     {
+      key: "react",
       name: "React.js",
       color: "text-cyan-400",
       bgColor: "bg-cyan-400/10",
@@ -15,6 +19,7 @@ const SkillSection = () => {
       )
     },
     {
+      key: "typescript",
       name: "TypeScript",
       color: "text-blue-400",
       bgColor: "bg-blue-400/10",
@@ -29,6 +34,7 @@ const SkillSection = () => {
       )
     },
     {
+      key: "javascript",
       name: "JavaScript",
       color: "text-yellow-400",
       bgColor: "bg-yellow-400/10",
@@ -43,6 +49,7 @@ const SkillSection = () => {
       )
     },
     {
+      key: "tailwindcss",
       name: "Tailwind CSS",
       color: "text-teal-400",
       bgColor: "bg-teal-400/10",
@@ -57,6 +64,7 @@ const SkillSection = () => {
       )
     },
     {
+      key: "html",
       name: "HTML",
       color: "text-orange-400",
       bgColor: "bg-orange-400/10",
@@ -71,6 +79,7 @@ const SkillSection = () => {
       )
     },
     {
+      key: "css",
       name: "CSS",
       color: "text-blue-500",
       bgColor: "bg-blue-500/10",
@@ -85,6 +94,7 @@ const SkillSection = () => {
       )
     },
     {
+      key: "git",
       name: "Git",
       color: "text-red-400",
       bgColor: "bg-red-400/10",
@@ -96,7 +106,38 @@ const SkillSection = () => {
         </svg>
       )
     }
-  ]
+]
+
+const catalogKeys = catalog.map((skill) => skill.key)
+const alwaysKeys = ["git"] // não aparece em linguagem/topics, vale para todos os repos
+const MAX_SKILLS = 12
+
+const genericSkill = {
+  color: "text-slate-300",
+  bgColor: "bg-slate-300/10",
+  borderColor: "border-slate-300/30",
+  description: "Linguagem usada nos projetos",
+  icon: (
+    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+    </svg>
+  )
+}
+
+const SkillSection = ({ username = 'thaylanbf1' }) => {
+  const { repos, loading, error } = useGithubRepos(username)
+
+  // Com a API indisponível (ou sem repos), mostra o catálogo sem contador
+  const dynamic = !loading && !error && repos.length > 0
+  const skills = dynamic
+    ? buildSkills(repos, catalogKeys, alwaysKeys)
+        .slice(0, MAX_SKILLS)
+        .map((found) => {
+          const known = catalog.find((skill) => skill.key === found.key)
+          return { ...(known ?? genericSkill), key: found.key, name: known?.name ?? found.name, count: found.count, repos: found.repos }
+        })
+    : catalog
 
   return (
     <section id="skills" className="min-h-screen py-20 px-6 relative z-10">
@@ -113,9 +154,9 @@ const SkillSection = () => {
 
         {/* Grid de Skills */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {skills.map((skill, index) => (
+          {skills.map((skill) => (
             <div
-              key={index}
+              key={skill.key}
               className={`group relative p-8 rounded-xl border-2 ${skill.borderColor} ${skill.bgColor} 
                 transition-all duration-300 hover:scale-105 hover:border-opacity-100
                 hover:shadow-lg`}
@@ -140,8 +181,19 @@ const SkillSection = () => {
                   {skill.description}
                 </p>
 
-                {/* Ponto decorativo */}
-                <div className={`w-1 h-1 rounded-full ${skill.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                {/* Contador de projetos */}
+                {skill.count > 0 && (
+                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${skill.bgColor} ${skill.color}`}>
+                    {skill.count} {skill.count === 1 ? "projeto" : "projetos"}
+                  </span>
+                )}
+
+                {/* Repos que usam a skill (hover) */}
+                {skill.repos && (
+                  <p className="text-xs text-slate-400 max-h-0 overflow-hidden opacity-0 group-hover:max-h-24 group-hover:opacity-100 transition-all duration-300">
+                    {skill.repos.join(", ")}
+                  </p>
+                )}
               </div>
 
               {/* Borda com efeito */}
