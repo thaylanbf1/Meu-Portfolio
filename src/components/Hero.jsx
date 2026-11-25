@@ -24,7 +24,7 @@ const Hero = () => {
         </p>
 
         <div className='flex gap-4 justify-center mb-12'>
-            <a href="#projeto" className='px-8 py-3 bg-linear-to-r from-purple-700 via-blue-400 to-blue-800 rounded-full font-bold hover:scale-105 transition-transform'>Ver Projetos</a>
+            <a href="#projetos" className='px-8 py-3 bg-linear-to-r from-purple-700 via-blue-400 to-blue-800 rounded-full font-bold hover:scale-105 transition-transform'>Ver Projetos</a>
 
             <a href="#contato" className='px-8 py-3 border border-purple-500 rounded-full font-bold hover:bg-purple-500/10 transition-colors'>Contatos</a>
         </div>
